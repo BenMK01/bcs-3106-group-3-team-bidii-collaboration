@@ -1,0 +1,176 @@
+<!-- templates/bidii_builders/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Dashboard</h2>
+        <hr>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Customers</h5>
+                <h2>{{ total_customers }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Pending Estimates</h5>
+                <h2>{{ pending_estimates }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Active Jobs</h5>
+                <h2>{{ active_jobs }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Total Revenue</h5>
+                <h2>KES {{ total_revenue|floatformat:2 }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Monthly Revenue</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Job Status Distribution</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="jobStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activities -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Customers</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for customer in recent_customers %}
+                        <li class="list-group-item">
+                            <strong>{{ customer.full_name }}</strong><br>
+                            <small>{{ customer.email }} | {{ customer.phone }}</small>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No recent customers</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Jobs</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for job in recent_jobs %}
+                        <li class="list-group-item">
+                            <strong>Job #{{ job.id }}</strong> - {{ job.estimate.customer.full_name }}<br>
+                            <small>Status: {{ job.get_status_display }} | Start: {{ job.start_date }}</small>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No recent jobs</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Fetch chart data and render charts
+fetch('{% url "charts_data" %}')
+    .then(response => response.json())
+    .then(data => {
+        // Revenue chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: data.revenue_data.map(item => item.month),
+                datasets: [{
+                    label: 'Revenue (KES)',
+                    data: data.revenue_data.map(item => item.revenue),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Job status chart
+        const jobStatusCtx = document.getElementById('jobStatusChart').getContext('2d');
+        new Chart(jobStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: data.job_status_data.map(item => item.status),
+                datasets: [{
+                    data: data.job_status_data.map(item => item.count),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 205, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    });
+</script>
+{% endblock %}

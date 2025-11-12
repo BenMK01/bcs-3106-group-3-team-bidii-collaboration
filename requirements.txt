@@ -1,0 +1,6 @@
+Django>=4.2.0
+matplotlib>=3.5.0
+Pillow>=9.0.0
+coverage>=7.0.0
+flake8>=6.0.0
+black>=23.0.0

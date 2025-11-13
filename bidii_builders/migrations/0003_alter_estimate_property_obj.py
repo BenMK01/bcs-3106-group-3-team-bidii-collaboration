@@ -7,13 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bidii_builders', '0002_customer_user'),
+        ("bidii_builders", "0002_customer_user"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='estimate',
-            name='property_obj',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='bidii_builders.property'),
+            model_name="estimate",
+            name="property_obj",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="bidii_builders.property",
+            ),
         ),
     ]

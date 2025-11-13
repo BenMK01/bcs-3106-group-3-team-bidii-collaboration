@@ -1,0 +1,53 @@
+<!-- templates/bidii_builders/customer_invoices.html -->
+{% extends 'base.html' %}
+
+{% block title %}My Invoices{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>My Invoices</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Job</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Issue Date</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for invoice in invoices %}
+                <tr>
+                    <td>{{ invoice.id }}</td>
+                    <td>Job #{{ invoice.job.id }}</td>
+                    <td>KES {{ invoice.amount|floatformat:2 }}</td>
+                    <td>
+                        {% if invoice.is_paid %}
+                            <span class="badge bg-success">Paid</span>
+                        {% else %}
+                            <span class="badge bg-warning">Unpaid</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ invoice.due_date|date:"M d, Y" }}</td>
+                    <td>{{ invoice.issue_date|date:"M d, Y" }}</td>
+                    <td><a href="{% url 'invoice_detail' invoice.id %}" class="btn btn-sm btn-info">View</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No invoices found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

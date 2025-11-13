@@ -1,0 +1,24 @@
+<!-- templates/bidii_builders/estimates/delete.html -->
+{% extends 'base.html' %}
+
+{% block title %}Delete Estimate{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Delete Estimate</h2>
+        <div class="alert alert-warning">
+            <p>Are you sure you want to delete estimate <strong>#{{ estimate.id }} - {{ estimate.customer.full_name }}</strong>?</p>
+            <p><strong>Customer:</strong> {{ estimate.customer.full_name }}</p>
+            <p><strong>Total Cost:</strong> KES {{ estimate.total_cost|floatformat:2 }}</p>
+            <p><strong>Status:</strong> {{ estimate.get_status_display }}</p>
+            <p>This action cannot be undone.</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'estimate_detail' estimate.id %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

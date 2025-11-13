@@ -1,0 +1,50 @@
+<!-- templates/bidii_builders/estimates/list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Estimates{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Estimates</h2>
+        <a href="{% url 'estimate_create' %}" class="btn btn-primary mb-3">Add New Estimate</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Total Cost</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for estimate in estimates %}
+                <tr>
+                    <td>{{ estimate.id }}</td>
+                    <td>{{ estimate.customer.full_name }}</td>
+                    <td>KES {{ estimate.total_cost|floatformat:2 }}</td>
+                    <td><span class="badge bg-{{ estimate.status|yesno:"success,warning,primary,secondary,danger,info" }}">{{ estimate.get_status_display }}</span></td>
+                    <td>{{ estimate.estimate_date|date:"M d, Y" }}</td>
+                    <td>
+                        <a href="{% url 'estimate_detail' estimate.id %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'estimate_update' estimate.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'estimate_delete' estimate.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No estimates found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

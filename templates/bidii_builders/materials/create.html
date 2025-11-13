@@ -1,0 +1,33 @@
+<!-- templates/bidii_builders/materials/create.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create Material{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Create New Material</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Material Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="unit_price" class="form-label">Unit Price (KES)</label>
+                <input type="number" step="0.01" class="form-control" id="unit_price" name="unit_price" required>
+            </div>
+            <div class="mb-3">
+                <label for="unit" class="form-label">Unit (e.g., kg, piece, meter)</label>
+                <input type="text" class="form-control" id="unit" name="unit" required>
+            </div>
+            <div class="mb-3">
+                <label for="supplier" class="form-label">Supplier</label>
+                <input type="text" class="form-control" id="supplier" name="supplier" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Material</button>
+            <a href="{% url 'material_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

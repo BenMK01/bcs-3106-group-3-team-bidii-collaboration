@@ -1,0 +1,76 @@
+<!-- templates/bidii_builders/reports.html -->
+{% extends 'base.html' %}
+
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Business Reports</h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Customers</h5>
+                <h2>{{ total_customers }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Total Jobs</h5>
+                <h2>{{ total_jobs }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Total Revenue</h5>
+                <h2>KES {{ total_revenue|floatformat:2 }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Monthly Revenue</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for item in monthly_revenue %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ item.month }}
+                        <span class="badge bg-primary rounded-pill">KES {{ item.revenue|floatformat:2 }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Job Status Distribution</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for status, count in job_status_counts.items %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ status }}
+                        <span class="badge bg-warning rounded-pill">{{ count }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

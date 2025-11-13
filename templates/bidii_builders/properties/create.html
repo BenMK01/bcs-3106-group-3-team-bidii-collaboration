@@ -1,0 +1,38 @@
+<!-- templates/bidii_builders/properties/create.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create Property{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Create New Property</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="customer" class="form-label">Customer</label>
+                <select class="form-control" id="customer" name="customer" required>
+                    <option value="">Select Customer</option>
+                    {% for customer in customers %}
+                    <option value="{{ customer.id }}">{{ customer.full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="property_type" class="form-label">Property Type</label>
+                <input type="text" class="form-control" id="property_type" name="property_type" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Property</button>
+            <a href="{% url 'property_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

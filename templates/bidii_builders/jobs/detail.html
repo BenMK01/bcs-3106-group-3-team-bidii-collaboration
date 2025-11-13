@@ -1,0 +1,98 @@
+<!-- templates/bidii_builders/jobs/detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}Job Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Job #{{ job.id }}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Job Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Customer:</strong> {{ job.estimate.customer.full_name }}</p>
+                <p><strong>Property:</strong> {{ job.estimate.property_obj.address }}</p>
+                <p><strong>Status:</strong> {{ job.get_status_display }}</p>
+                <p><strong>Scheduled Date:</strong> {{ job.scheduled_date|date:"M d, Y" }}</p>
+                <p><strong>Start Date:</strong> {{ job.start_date|date:"M d, Y" }}</p>
+                {% if job.end_date %}<p><strong>End Date:</strong> {{ job.end_date|date:"M d, Y" }}</p>{% endif %}
+                {% if job.actual_cost %}<p><strong>Actual Cost:</strong> KES {{ job.actual_cost|floatformat:2 }}</p>{% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Estimate Details</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Estimate ID:</strong> {{ job.estimate.id }}</p>
+                <p><strong>Total Cost:</strong> KES {{ job.estimate.total_cost|floatformat:2 }}</p>
+                <p><strong>Status:</strong> {{ job.estimate.get_status_display }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Materials Used</h5>
+                <a href="{% url 'job_materials_add' job.id %}" class="btn btn-sm btn-primary">Add Material</a>
+            </div>
+            <div class="card-body">
+                {% if materials %}
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Qty</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for material in materials %}
+                        <tr>
+                            <td>{{ material.material.name }}</td>
+                            <td>{{ material.quantity }} {{ material.material.unit }}</td>
+                            <td>KES {{ material.unit_price|floatformat:2 }}</td>
+                            <td>KES {{ material.total_price|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No materials added yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Invoice</h5>
+            </div>
+            <div class="card-body">
+                {% if invoice %}
+                <p><strong>Invoice #:</strong> {{ invoice.id }}</p>
+                <p><strong>Amount:</strong> KES {{ invoice.amount|floatformat:2 }}</p>
+                <p><strong>Status:</strong> {% if invoice.is_paid %}Paid{% else %}Unpaid{% endif %}</p>
+                <p><strong>Due Date:</strong> {{ invoice.due_date|date:"M d, Y" }}</p>
+                {% else %}
+                <p>No invoice generated yet.</p>
+                <a href="{% url 'invoice_create' job.id %}" class="btn btn-sm btn-success">Create Invoice</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

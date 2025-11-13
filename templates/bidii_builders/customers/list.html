@@ -1,0 +1,52 @@
+<!-- templates/bidii_builders/customers/list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Customers{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Customers</h2>
+        <a href="{% url 'customer_create' %}" class="btn btn-primary mb-3">Add New Customer</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Date Added</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.id }}</td>
+                    <td>{{ customer.full_name }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.phone }}</td>
+                    <td>{{ customer.address|truncatechars:50 }}</td>
+                    <td>{{ customer.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        <a href="{% url 'customer_detail' customer.id %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'customer_update' customer.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'customer_delete' customer.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No customers found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

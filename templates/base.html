@@ -11,13 +11,57 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'dashboard' %}">Bidii Quality Builders</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-                <a class="nav-link" href="{% url 'customer_list' %}">Customers</a>
-                <a class="nav-link" href="#">Estimates</a>
-                <a class="nav-link" href="#">Jobs</a>
-                <a class="nav-link" href="#">Invoices</a>
+            <a class="navbar-brand" href="{% if user.is_staff %}{% url 'dashboard' %}{% else %}{% url 'customer_dashboard' %}{% endif %}">Bidii Quality Builders</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    {% if user.is_staff %}
+                        <!-- Staff Navigation -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'customer_list' %}">Customers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'estimate_create' %}">Estimates</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'job_schedule' %}">Jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'material_list' %}">Materials</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'reports' %}">Reports</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'backup' %}">Backup</a>
+                        </li>
+                    {% else %}
+                        <!-- Customer Navigation -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'customer_dashboard' %}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'customer_estimates' %}">My Estimates</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'customer_jobs' %}">My Jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'customer_invoices' %}">My Invoices</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'customer_profile' %}">My Profile</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item ms-auto">
+                        <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -35,6 +79,11 @@
         {% block content %}
         {% endblock %}
     </div>
+
+    <!-- Hidden logout form -->
+    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     {% block scripts %}

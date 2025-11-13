@@ -1,0 +1,52 @@
+<!-- templates/bidii_builders/job_materials/list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Job Materials{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Job Materials</h2>
+        <a href="{% url 'job_material_create' %}" class="btn btn-primary mb-3">Add New Job Material</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Job</th>
+                    <th>Material</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job_material in job_materials %}
+                <tr>
+                    <td>{{ job_material.id }}</td>
+                    <td>Job #{{ job_material.job.id }}</td>
+                    <td>{{ job_material.material.name }}</td>
+                    <td>{{ job_material.quantity }} {{ job_material.material.unit }}</td>
+                    <td>KES {{ job_material.unit_price|floatformat:2 }}</td>
+                    <td>KES {{ job_material.total_price|floatformat:2 }}</td>
+                    <td>
+                        <a href="{% url 'job_material_detail' job_material.id %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'job_material_update' job_material.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'job_material_delete' job_material.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No job materials found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

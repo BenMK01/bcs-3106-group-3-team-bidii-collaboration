@@ -1,0 +1,33 @@
+<!-- templates/bidii_builders/job_materials/add.html -->
+{% extends 'base.html' %}
+
+{% block title %}Add Material to Job{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Add Material to Job #{{ job.id }}</h2>
+        <p><strong>Customer:</strong> {{ job.estimate.customer.full_name }}</p>
+        <p><strong>Job Status:</strong> {{ job.get_status_display }}</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="material_id" class="form-label">Material</label>
+                <select class="form-control" id="material_id" name="material_id" required>
+                    <option value="">Select Material</option>
+                    {% for material in materials %}
+                    <option value="{{ material.id }}">{{ material.name }} - KES {{ material.unit_price|floatformat:2 }} per {{ material.unit }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" step="0.01" class="form-control" id="quantity" name="quantity" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Material</button>
+            <a href="{% url 'job_detail' job.id %}" class="btn btn-secondary">Back to Job</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

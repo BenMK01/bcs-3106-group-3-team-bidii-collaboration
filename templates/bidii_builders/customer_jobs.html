@@ -1,0 +1,45 @@
+<!-- templates/bidii_builders/customer_jobs.html -->
+{% extends 'base.html' %}
+
+{% block title %}My Jobs{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>My Jobs</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Estimate</th>
+                    <th>Start Date</th>
+                    <th>Status</th>
+                    <th>Scheduled Date</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.id }}</td>
+                    <td>Estimate #{{ job.estimate.id }}</td>
+                    <td>{{ job.start_date|date:"M d, Y" }}</td>
+                    <td><span class="badge bg-{{ job.status|yesno:"primary,warning,success,danger" }}">{{ job.get_status_display }}</span></td>
+                    <td>{{ job.scheduled_date|date:"M d, Y" }}</td>
+                    <td><a href="{% url 'job_detail' job.id %}" class="btn btn-sm btn-info">View</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No jobs found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

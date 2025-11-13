@@ -1,0 +1,38 @@
+<!-- templates/bidii_builders/invoices/create.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create Invoice{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Create New Invoice</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="job" class="form-label">Job</label>
+                <select class="form-control" id="job" name="job" required>
+                    <option value="">Select Job</option>
+                    {% for job in jobs %}
+                    <option value="{{ job.id }}">Job #{{ job.id }} - {{ job.estimate.customer.full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount (KES)</label>
+                <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+            </div>
+            <div class="mb-3">
+                <label for="due_date" class="form-label">Due Date</label>
+                <input type="date" class="form-control" id="due_date" name="due_date" required>
+            </div>
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Invoice</button>
+            <a href="{% url 'invoice_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

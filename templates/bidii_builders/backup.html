@@ -1,0 +1,25 @@
+<!-- templates/bidii_builders/backup.html -->
+{% extends 'base.html' %}
+
+{% block title %}Database Backup{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Database Backup</h2>
+        <p>Click the button below to create a backup of your database.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Create Backup</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+        
+        <div class="mt-4">
+            <h5>Backup Information</h5>
+            <p>This will create a zip file containing your database backup. The file will be downloaded automatically.</p>
+            <p>It's recommended to perform regular backups to prevent data loss.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

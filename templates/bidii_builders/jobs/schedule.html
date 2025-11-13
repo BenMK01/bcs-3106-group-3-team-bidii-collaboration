@@ -1,0 +1,34 @@
+<!-- templates/bidii_builders/jobs/schedule.html -->
+{% extends 'base.html' %}
+
+{% block title %}Schedule Job{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Schedule New Job</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="estimate_id" class="form-label">Accepted Estimate</label>
+                <select class="form-control" id="estimate_id" name="estimate_id" required>
+                    <option value="">Select Estimate</option>
+                    {% for estimate in estimates %}
+                    <option value="{{ estimate.id }}">Estimate #{{ estimate.id }} - {{ estimate.customer.full_name }} - KES {{ estimate.total_cost|floatformat:2 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="scheduled_date" class="form-label">Scheduled Date</label>
+                <input type="date" class="form-control" id="scheduled_date" name="scheduled_date" required>
+            </div>
+            <div class="mb-3">
+                <label for="start_date" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Schedule Job</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

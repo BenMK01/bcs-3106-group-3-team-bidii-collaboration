@@ -1,0 +1,121 @@
+<!-- templates/bidii_builders/estimates/create.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create Estimate{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Create New Estimate</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="customer" class="form-label">Customer</label>
+                <select class="form-control" id="customer" name="customer" required>
+                    <option value="">Select Customer</option>
+                    {% for customer in customers %}
+                    <option value="{{ customer.id }}">{{ customer.full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="property_obj" class="form-label">Property</label>
+                <div class="input-group">
+                    <select class="form-control" id="property_obj" name="property_obj">
+                        <option value="">Select Property (optional)</option>
+                        {% for property in properties %}
+                        <option value="{{ property.id }}">{{ property.address }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="button" class="btn btn-outline-secondary" onclick="createNewProperty()">Create New</button>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="visit_date" class="form-label">Visit Date</label>
+                <input type="date" class="form-control" id="visit_date" name="visit_date" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="initial_outline" class="form-label">Initial Outline</label>
+                <textarea class="form-control" id="initial_outline" name="initial_outline" rows="3" required></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="detailed_estimate" class="form-label">Detailed Estimate</label>
+                <textarea class="form-control" id="detailed_estimate" name="detailed_estimate" rows="5" required></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="total_cost" class="form-label">Total Cost (KES)</label>
+                <input type="number" step="0.01" class="form-control" id="total_cost" name="total_cost" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-control" id="status" name="status" required>
+                    <option value="pending">Pending</option>
+                    <option value="sent">Sent</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Save Estimate</button>
+            <a href="{% url 'estimate_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+<script>
+function createNewProperty() {
+    const customerSelect = document.getElementById('customer');
+    const customer_id = customerSelect.value;
+    
+    if (!customer_id) {
+        alert('Please select a customer first!');
+        return;
+    }
+    
+    const address = prompt('Enter property address:');
+    if (!address) return;
+    
+    const property_type = prompt('Enter property type (e.g., House, Apartment):', 'House');
+    if (!property_type) return;
+    
+    // Create property via AJAX
+    fetch('/api/create-property/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            customer_id: customer_id,
+            address: address,
+            property_type: property_type
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const propertySelect = document.getElementById('property_obj');
+            const option = document.createElement('option');
+            option.value = data.property_id;
+            option.textContent = data.address;
+            propertySelect.appendChild(option);
+            propertySelect.value = data.property_id;
+            alert('Property created successfully!');
+        } else {
+            alert('Error creating property: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+}
+</script>
+{% endblock %}

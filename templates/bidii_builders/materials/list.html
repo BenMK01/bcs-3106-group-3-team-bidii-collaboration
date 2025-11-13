@@ -1,0 +1,52 @@
+<!-- templates/bidii_builders/materials/list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Materials{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Building Materials</h2>
+        <a href="{% url 'material_create' %}" class="btn btn-primary mb-3">Add New Material</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Unit Price (KES)</th>
+                    <th>Unit</th>
+                    <th>Supplier</th>
+                    <th>Date Added</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for material in materials %}
+                <tr>
+                    <td>{{ material.id }}</td>
+                    <td>{{ material.name }}</td>
+                    <td>{{ material.unit_price|floatformat:2 }}</td>
+                    <td>{{ material.unit }}</td>
+                    <td>{{ material.supplier }}</td>
+                    <td>{{ material.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        <a href="{% url 'material_detail' material.id %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'material_update' material.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'material_delete' material.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No materials found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!-- templates/bidii_builders/payments/create.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create Payment{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Create New Payment</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="invoice" class="form-label">Invoice</label>
+                <select class="form-control" id="invoice" name="invoice" required>
+                    <option value="">Select Invoice</option>
+                    {% for invoice in invoices %}
+                    <option value="{{ invoice.id }}">Invoice #{{ invoice.id }} - {{ invoice.job.estimate.customer.full_name }} - KES {{ invoice.amount|floatformat:2 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount (KES)</label>
+                <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+            </div>
+            <div class="mb-3">
+                <label for="payment_method" class="form-label">Payment Method</label>
+                <input type="text" class="form-control" id="payment_method" name="payment_method" required>
+            </div>
+            <div class="mb-3">
+                <label for="reference_number" class="form-label">Reference Number</label>
+                <input type="text" class="form-control" id="reference_number" name="reference_number">
+            </div>
+            <button type="submit" class="btn btn-primary">Save Payment</button>
+            <a href="{% url 'payment_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

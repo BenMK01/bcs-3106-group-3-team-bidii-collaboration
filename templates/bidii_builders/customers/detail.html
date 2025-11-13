@@ -1,0 +1,110 @@
+<!-- templates/bidii_builders/customers/detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}Customer Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Customer: {{ customer.full_name }}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Customer Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ customer.full_name }}</p>
+                <p><strong>Email:</strong> {{ customer.email }}</p>
+                <p><strong>Phone:</strong> {{ customer.phone }}</p>
+                <p><strong>Address:</strong> {{ customer.address }}</p>
+                <p><strong>Member Since:</strong> {{ customer.created_at|date:"M d, Y" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>Related Information</h3>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="properties-tab" data-bs-toggle="tab" data-bs-target="#properties" type="button" role="tab">Properties</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="estimates-tab" data-bs-toggle="tab" data-bs-target="#estimates" type="button" role="tab">Estimates</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="jobs-tab" data-bs-toggle="tab" data-bs-target="#jobs" type="button" role="tab">Jobs</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="invoices-tab" data-bs-toggle="tab" data-bs-target="#invoices" type="button" role="tab">Invoices</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="properties" role="tabpanel">
+                <div class="mt-3">
+                    {% for property in properties %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h6>{{ property.property_type }}</h6>
+                            <p class="mb-0">{{ property.address }}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p>No properties found</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tab-pane fade" id="estimates" role="tabpanel">
+                <div class="mt-3">
+                    {% for estimate in estimates %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h6>Estimate #{{ estimate.id }} - {{ estimate.get_status_display }}</h6>
+                            <p class="mb-0">Total: KES {{ estimate.total_cost|floatformat:2 }}</p>
+                            <small>Created: {{ estimate.estimate_date|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p>No estimates found</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tab-pane fade" id="jobs" role="tabpanel">
+                <div class="mt-3">
+                    {% for job in jobs %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h6>Job #{{ job.id }} - {{ job.get_status_display }}</h6>
+                            <p class="mb-0">Start: {{ job.start_date|date:"M d, Y" }}</p>
+                            <small>Scheduled: {{ job.scheduled_date|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p>No jobs found</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tab-pane fade" id="invoices" role="tabpanel">
+                <div class="mt-3">
+                    {% for invoice in invoices %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h6>Invoice #{{ invoice.id }} - {% if invoice.is_paid %}Paid{% else %}Unpaid{% endif %}</h6>
+                            <p class="mb-0">Amount: KES {{ invoice.amount|floatformat:2 }}</p>
+                            <small>Due: {{ invoice.due_date|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p>No invoices found</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+<!-- templates/bidii_builders/customer_dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}Customer Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Welcome, {{ customer.first_name }}!</h2>
+        <p>Your personal dashboard for Bidii Quality Builders.</p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Estimates</h5>
+                <h2>{{ total_estimates }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Pending Estimates</h5>
+                <h2>{{ pending_estimates }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Active Jobs</h5>
+                <h2>{{ active_jobs }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Completed Jobs</h5>
+                <h2>{{ completed_jobs }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activities -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Estimates</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for estimate in recent_estimates %}
+                        <li class="list-group-item">
+                            <strong>Estimate #{{ estimate.id }}</strong><br>
+                            <small>Status: {{ estimate.get_status_display }} | Date: {{ estimate.estimate_date|date:"M d, Y" }}</small>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No recent estimates</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Jobs</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for job in recent_jobs %}
+                        <li class="list-group-item">
+                            <strong>Job #{{ job.id }}</strong><br>
+                            <small>Status: {{ job.get_status_display }} | Start: {{ job.start_date }}</small>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No recent jobs</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="{% url 'customer_estimates' %}" class="btn btn-outline-primary w-100">View My Estimates</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'customer_jobs' %}" class="btn btn-outline-success w-100">View My Jobs</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'customer_invoices' %}" class="btn btn-outline-info w-100">View My Invoices</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

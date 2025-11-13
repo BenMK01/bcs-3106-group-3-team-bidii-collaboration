@@ -1,0 +1,51 @@
+<!-- templates/bidii_builders/jobs/create.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create Job{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Create New Job</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="estimate" class="form-label">Estimate</label>
+                <select class="form-control" id="estimate" name="estimate" required>
+                    <option value="">Select Estimate</option>
+                    {% for estimate in estimates %}
+                    <option value="{{ estimate.id }}">Estimate #{{ estimate.id }} - {{ estimate.customer.full_name }} - KES {{ estimate.total_cost|floatformat:2 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="start_date" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" required>
+            </div>
+            <div class="mb-3">
+                <label for="end_date" class="form-label">End Date</label>
+                <input type="date" class="form-control" id="end_date" name="end_date">
+            </div>
+            <div class="mb-3">
+                <label for="scheduled_date" class="form-label">Scheduled Date</label>
+                <input type="date" class="form-control" id="scheduled_date" name="scheduled_date" required>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-control" id="status" name="status" required>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Job</button>
+            <a href="{% url 'job_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+<!-- templates/bidii_builders/estimates/detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}Estimate Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Estimate #{{ estimate.id }}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Estimate Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Customer:</strong> {{ estimate.customer.full_name }}</p>
+                <p><strong>Property:</strong> {{ estimate.property_obj.address }}</p>
+                <p><strong>Visit Date:</strong> {{ estimate.visit_date|date:"M d, Y" }}</p>
+                <p><strong>Total Cost:</strong> KES {{ estimate.total_cost|floatformat:2 }}</p>
+                <p><strong>Status:</strong> <span class="badge bg-{{ estimate.status|yesno:"success,warning,primary,secondary,danger,info" }}">{{ estimate.get_status_display }}</span></p>
+                <p><strong>Estimate Date:</strong> {{ estimate.estimate_date|date:"M d, Y" }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Customer Details</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ estimate.customer.full_name }}</p>
+                <p><strong>Email:</strong> {{ estimate.customer.email }}</p>
+                <p><strong>Phone:</strong> {{ estimate.customer.phone }}</p>
+                <p><strong>Address:</strong> {{ estimate.customer.address }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Estimate Details</h5>
+            </div>
+            <div class="card-body">
+                <h6>Initial Outline:</h6>
+                <p>{{ estimate.initial_outline }}</p>
+                
+                <h6>Detailed Estimate:</h6>
+                <p>{{ estimate.detailed_estimate }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <a href="{% url 'estimate_update' estimate.id %}" class="btn btn-warning">Edit</a>
+        <a href="{% url 'estimate_delete' estimate.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'estimate_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+{% endblock %}

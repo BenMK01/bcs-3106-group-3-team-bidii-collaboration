@@ -1,0 +1,21 @@
+<!-- templates/bidii_builders/customers/delete.html -->
+{% extends 'base.html' %}
+
+{% block title %}Delete Customer{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Delete Customer</h2>
+        <div class="alert alert-warning">
+            <p>Are you sure you want to delete customer <strong>{{ customer.full_name }}</strong>?</p>
+            <p>This action cannot be undone.</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'customer_detail' customer.id %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

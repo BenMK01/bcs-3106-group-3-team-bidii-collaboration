@@ -2,8 +2,10 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
+from django.contrib.auth.models import User
 
 class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -40,7 +42,7 @@ class Estimate(models.Model):
     ]
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    property_obj = models.ForeignKey(Property, on_delete=models.CASCADE)
+    property_obj = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)  # Make nullable
     visit_date = models.DateField()
     initial_outline = models.TextField()
     detailed_estimate = models.TextField()
@@ -79,7 +81,7 @@ class Job(models.Model):
 class Material(models.Model):
     name = models.CharField(max_length=100)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    unit = models.CharField(max_length=20)  # e.g., 'kg', 'piece', 'meter'
+    unit = models.CharField(max_length=20)
     supplier = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
